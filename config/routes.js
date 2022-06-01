@@ -1,42 +1,69 @@
 const express = require('express');
-const routes = express.Router();
+const mysql = require('mysql');
+const router = express.Router();
 
-let db = [
-    { '1': { Nome: 'Cliente 1', Idade: '20' } },
-    { '2': { Nome: 'Cliente 2', Idade: '19' } },
-    { '3': { Nome: 'Cliente 3', Idade: '18' } },
-]
 
-// Busca de Dados
-routes.get("/",(req,res) => {
-    return res.json(db);
+// Database connection
+let conexao = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'precato'
 });
-
-// Inserir Dados
-routes.post("/add",(req, res) => {
-    const body = req.body;
-
-    if (!body) {
-        return res.send(400).end();
-    }
-
-    db.push(body);
-    return res.json(body);
-})
-
-// Deletar Dados
-routes.delete('/:id', (req, res) => {
-    const id = req.params.id;
-
-    let newDb = db.filter(item => {
-        if (!item[id]){
-            return item
+router.use(express.static('public'));
+conexao.connect(
+    (erro) => {
+        if (erro) {
+            console.log('Error while connecting:');
+            console.log(erro);
+        } else {
+            console.log('Connected!');
         }
-    })
+    }
+);
 
-    db = newDb;
 
-    return res.send(newDb);
+// Read
+router.get('/', (req, res, next) => {
+    conexao.query("SELECT * FROM subscriptions",
+    (erro,resultado) => {
+        if(erro) {
+            console.log(erro);
+            res.send("Error");
+        } else {
+            res.send(resultado);
+        }
+    });
+
+    /*
+    conexao.query("DELETE FROM dados WHERE registro_ans=?", [reg_ans],
+    (erro,resultado) => {
+        if(erro) {
+            console.log(erro);
+            res.status(500).send(erro);
+            res.send("Deu erro");
+        } else {
+            res.send(resultado);
+        }
+    });
+    */
 })
 
-module.exports = routes;
+// Create Subscription
+router.post("/add",(req, res) => {
+    const name = req.body.name;
+
+    conexao.query("INSERT INTO subscriptions (name) VALUES(?)", [name],
+        (erro,resultado) => {
+            if(erro) {
+                console.log(erro);
+                res.status(500).send(erro);
+                res.send("Error");
+            } else {
+                res.send(resultado);
+            }
+        });
+})
+
+
+module.exports = router;
