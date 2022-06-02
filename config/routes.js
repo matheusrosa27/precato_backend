@@ -25,7 +25,7 @@ conexao.connect(
 
 // Read
 router.get('/', (req, res, next) => {
-    conexao.query("SELECT * FROM subscriptions INNER JOIN message_flow ON message_flow.id = last_message",
+    conexao.query("SELECT subscriptions.id, subscription_date, name, last_message, active, message_flow.id, template_name, position FROM subscriptions INNER JOIN message_flow ON message_flow.id = last_message",
     (erro,resultado) => {
         if(erro) {
             console.log(erro);
@@ -34,19 +34,6 @@ router.get('/', (req, res, next) => {
             res.send(resultado);
         }
     });
-
-    /*
-    conexao.query("DELETE FROM dados WHERE registro_ans=?", [reg_ans],
-    (erro,resultado) => {
-        if(erro) {
-            console.log(erro);
-            res.status(500).send(erro);
-            res.send("Deu erro");
-        } else {
-            res.send(resultado);
-        }
-    });
-    */
 })
 
 // Create Subscription
