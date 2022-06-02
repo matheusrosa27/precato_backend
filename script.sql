@@ -44,7 +44,7 @@ SELECT * FROM message_flow;
 SELECT * FROM subscriptions INNER JOIN message_flow ON message_flow.id = last_message;
 
 CREATE EVENT att ON SCHEDULE
-	EVERY 8 DAY_HOUR
+	EVERY 24 HOUR
     DO
 		UPDATE `subscriptions` SET `last_message` = CASE
 			WHEN (active = 1) 
@@ -71,7 +71,7 @@ INSERT INTO subscriptions (name) VALUES ("matheusblega@gmail.com");
 
 /* Creating another messages after basic DB */
 INSERT INTO message_flow (template_name, position)
-VALUES ("test 4", 04);
+VALUES ("test 4", 03);
 INSERT INTO message_flow (template_name, position)
 VALUES ("test 5", 05);
 
@@ -86,3 +86,6 @@ SELECT
     template_name,
     position
 FROM subscriptions INNER JOIN message_flow ON message_flow.id = last_message;
+
+/* If you want to activate ALL EMAILS, run this */
+/* UPDATE subscriptions SET active = 1; */
