@@ -25,7 +25,7 @@ conexao.connect(
 
 // Read
 router.get('/', (req, res, next) => {
-    conexao.query("SELECT * FROM subscriptions",
+    conexao.query("SELECT * FROM subscriptions INNER JOIN message_flow ON message_flow.id = last_message",
     (erro,resultado) => {
         if(erro) {
             console.log(erro);
