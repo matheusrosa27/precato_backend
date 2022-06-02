@@ -8,5 +8,5 @@ In "assets" there are some screenshots of the project running.
 Para este projeto, é necessário executar o "script.sql" no MySQL Workbench 8.0;
 Após isto, basta dar "npm start" na pasta para iniciar o index.js;
 Para testar as rotas, utilizei o "Postman";
-Lemnrando que você precisa ter o "Node.js" instalado no seu PC;
+Lembrando que você precisa ter o "Node.js" instalado no seu PC;
 Na pasta "assets" encontram-se alguns printscreens do projeto rodando.
