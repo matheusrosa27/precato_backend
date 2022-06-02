@@ -40,16 +40,28 @@ router.get('/', (req, res, next) => {
 router.post("/add",(req, res) => {
     const name = req.body.name;
 
-    conexao.query("INSERT INTO subscriptions (name) VALUES(?)", [name],
-        (erro,resultado) => {
-            if(erro) {
-                console.log(erro);
-                res.status(500).send(erro);
-                res.send("Error");
-            } else {
-                res.send(resultado);
-            }
-        });
+    if(!name){
+        res.status(400).send("Digite um email!");
+    } else if (name.match(/.@...../i)){
+        if (name.match(/.com/i)){
+            conexao.query("INSERT INTO subscriptions (name) VALUES(?)", [name],
+                (erro,resultado) => {
+                    if(erro) {
+                        console.log(erro);
+                        res.status(500).send(erro);
+                        res.send("Error");
+                    } else {
+                        res.send(resultado);
+                    }
+                });
+        } else {
+            res.status(400).send("Alguma informação está inválida!")
+        }
+    } else {
+        res.status(400).send("Alguma informação está inválida!")
+    }
+
+    
 })
 
 
